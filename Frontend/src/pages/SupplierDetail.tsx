@@ -14,7 +14,7 @@ import { ComparisonModal } from '@/components/modals/ComparisonModal';
 import { ConfirmationModal } from '@/components/modals/ConfirmationModal';
 import { toast } from 'sonner';
 import { supplierService } from '@/services/supplierService';
-import { api } from '@/lib/api';
+import { api, BACKEND_URL } from '@/lib/api';
 import { purchaseOrders, qualityReports, deliveryLogs } from '@/data/mockData';
 import { Navigation, MapPin, AlertTriangle, TrendingUp, CheckCircle2, XCircle, CloudRain, Newspaper, Loader2, Download, Plus, AlertCircle, Sparkles, FileText, Truck, Calendar, RefreshCw, Trash2 } from 'lucide-react';
 
@@ -83,9 +83,7 @@ const SupplierDetail = () => {
     }
     let baseUrl = api.defaults.baseURL || '';
     if (!baseUrl.startsWith('http')) {
-      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      const backendHost = isLocalhost ? 'http://localhost:8000' : window.location.origin;
-      baseUrl = `${backendHost}${baseUrl}`;
+      baseUrl = `${BACKEND_URL}${baseUrl}`;
     }
     const url = `${baseUrl}/documents/${receiptId}/download`;
     window.open(url, '_blank');

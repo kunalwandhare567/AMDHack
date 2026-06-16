@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import LogisticsAnimation from '@/components/auth/LogisticsAnimation';
+import { BACKEND_URL } from '@/lib/api';
 
 // Mock users database
 const MOCK_USERS = [
@@ -41,7 +42,7 @@ export default function Login() {
       formData.append('username', email);
       formData.append('password', password);
 
-      const response = await fetch('http://localhost:8000/api/auth/login', {
+      const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',

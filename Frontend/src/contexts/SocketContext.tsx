@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useToast } from '@/hooks/use-toast';
+import { BACKEND_URL } from '@/lib/api';
 
 interface SocketContextType {
     socket: Socket | null;
@@ -21,7 +22,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         // Connect to backend URL
-        const newSocket = io('http://localhost:8000', {
+        const newSocket = io(BACKEND_URL, {
             transports: ['websocket'],
             autoConnect: true,
         });

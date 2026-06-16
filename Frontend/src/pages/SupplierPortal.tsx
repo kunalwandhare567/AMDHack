@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { api } from '@/lib/api';
+import { api, BACKEND_URL } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import {
   Building2, TrendingUp, AlertTriangle, MapPin, Package,
@@ -294,9 +294,7 @@ const handleDownloadReceipt = (receiptId: string) => {
   }
   let baseUrl = api.defaults.baseURL || '';
   if (!baseUrl.startsWith('http')) {
-    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const backendHost = isLocalhost ? 'http://localhost:8000' : window.location.origin;
-    baseUrl = `${backendHost}${baseUrl}`;
+    baseUrl = `${BACKEND_URL}${baseUrl}`;
   }
   const url = `${baseUrl}/documents/${receiptId}/download`;
   window.open(url, '_blank');

@@ -4,6 +4,7 @@ import { MainLayout } from '@/components/layout/MainLayout';
 import { supplierService, ProductRow, Supplier } from '@/services/supplierService';
 import { Loader2, Plus, Trash2, Sparkles, CheckCircle2, AlertTriangle, ArrowRight, Upload, Settings } from 'lucide-react';
 import { toast } from 'sonner';
+import { BACKEND_URL } from '@/lib/api';
 
 const DEFAULT_ROW: ProductRow = {
     product_type: 'skincare',
@@ -77,7 +78,7 @@ const AddSupplier = () => {
         headers['X-User-Model'] = apiModel;
 
         try {
-            const response = await fetch('http://localhost:8000/api/suppliers/extract-document', {
+            const response = await fetch(`${BACKEND_URL}/api/suppliers/extract-document`, {
                 method: 'POST',
                 headers,
                 body: formData,

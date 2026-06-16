@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+sqlmodel
+langgraph
+langchain
+langchain-community
+langchain-openai
+python-dotenv
+python-socketio
+python-jose[cryptography]
+passlib[bcrypt]
+pypdf
+python-multipart
+psycopg2-binary
+supabase
+vecs
+httpx

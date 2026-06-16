@@ -15,3 +15,7 @@ psycopg2-binary
 supabase
 vecs
 httpx
+openai
+openpyxl
+fpdf2
+pgvector

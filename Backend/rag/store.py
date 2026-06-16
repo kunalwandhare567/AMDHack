@@ -22,15 +22,17 @@ def get_embedding_client(api_key: str = None) -> OpenAI:
 
 
 def embed_texts(texts: list[str], api_key: str = None) -> list[list[float]]:
-    """Embed a list of texts using text-embedding-3-small via OpenRouter."""
+    """Embed a list of texts using the configured embedding model via OpenRouter."""
     client = get_embedding_client(api_key=api_key)
-    model = os.getenv("OPENROUTER_EMBED_MODEL", "openai/text-embedding-3-small")
+    model = os.getenv("OPENROUTER_EMBED_MODEL", "qwen/qwen3-embedding-8b")
+    dimension = int(os.getenv("EMBEDDING_DIMENSION", "1536"))
     response = client.embeddings.create(
         model=model,
         input=texts,
-        encoding_format="float"
+        encoding_format="float",
+        dimensions=dimension
     )
-    return [item.embedding for item in response.data]
+    return [item.embedding[:dimension] for item in response.data]
 
 
 def embed_query(text: str, api_key: str = None) -> list[float]:

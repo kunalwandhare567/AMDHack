@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"), override=True)
 
-SQL = """
+SQL_TEMPLATE = """
 -- Enable pgvector extension
 CREATE EXTENSION IF NOT EXISTS vector;
 
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS supplier_embeddings (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     supplier_id text REFERENCES supplier(supplier_id) ON DELETE CASCADE,
     content text,
-    embedding vector(1536),
+    embedding vector({dimension}),
     metadata jsonb,
     created_at timestamptz DEFAULT now()
 );
@@ -33,7 +33,7 @@ CREATE INDEX IF NOT EXISTS supplier_embeddings_embedding_idx
 
 -- Semantic search RPC function
 CREATE OR REPLACE FUNCTION match_suppliers(
-    query_embedding vector(1536),
+    query_embedding vector({dimension}),
     match_count int DEFAULT 5,
     match_threshold float DEFAULT 0.5
 )
@@ -65,14 +65,16 @@ def run_setup():
         print("ERROR: DATABASE_URL not found in .env")
         return
 
-    print("Connecting to Supabase...")
+    dimension = os.getenv("EMBEDDING_DIMENSION", "1536")
+    print(f"Connecting to Supabase (Targeting {dimension}-dimension vectors)...")
     try:
         conn = psycopg2.connect(db_url, sslmode="require")
         conn.autocommit = True
         cur = conn.cursor()
 
         print("Running pgvector setup SQL...")
-        cur.execute(SQL)
+        sql = SQL_TEMPLATE.format(dimension=dimension)
+        cur.execute(sql)
 
         print("\n[OK] pgvector setup complete!")
         print("   - vector extension: enabled")

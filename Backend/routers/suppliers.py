@@ -929,6 +929,14 @@ Output ONLY valid JSON, no markdown."""
     session.commit()
     session.refresh(supplier)
 
+    # Trigger background ingestion to update Supabase pgvector embeddings automatically
+    try:
+        import threading
+        from rag.store import ingest_suppliers
+        threading.Thread(target=ingest_suppliers, daemon=True).start()
+    except Exception as emb_err:
+        print(f"[AddSupplier] Error starting embedding ingestion: {emb_err}")
+
     return {"success": True, "data": supplier}
 
 
@@ -1308,6 +1316,14 @@ async def upload_qc_log(
     session.add(supplier)
     session.commit()
     session.refresh(supplier)
+    
+    # Trigger background ingestion to update Supabase pgvector embeddings automatically with new QC scores
+    try:
+        import threading
+        from rag.store import ingest_suppliers
+        threading.Thread(target=ingest_suppliers, daemon=True).start()
+    except Exception as emb_err:
+        print(f"[UploadQCLog] Error starting embedding ingestion: {emb_err}")
     
     return {
         "success": True,
